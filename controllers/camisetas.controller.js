@@ -1,7 +1,7 @@
 import * as camisetasService from '../services/camisetas.service.js';
 
 export function getAll(req, res) {
-    res.json(camisetasService.getAll());
+    res.json(camisetasService.getAll(req.query));
 }
 
 export function getById(req, res) {
