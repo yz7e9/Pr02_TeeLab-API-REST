@@ -1,6 +1,6 @@
 import express from 'express';
 import camisetasRouter from './routes/camisetas.route.js';
-import comandasRouter from './routes/comandas.route.js';
+//import comandasRouter from './routes/comandas.route.js';
 
 const app = express();
 const PORT = 3001;
@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 
 // Rutas
 app.use('/api/camisetas', camisetasRouter);
-app.use('/api/comandas', comandasRouter);
+//app.use('/api/comandas', comandasRouter);
 
 // Middleware de errores
 app.use((err, req, res, next) => {
