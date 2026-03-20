@@ -1,6 +1,6 @@
 import { camisetas } from "../data/camisetas.js";
 
-export function getAll(reqQuery) {
+export function getAll(reqQuery = {}) {
     let resultado = camisetas;
     const { talla, color, tag, q, sort } = reqQuery;
     
@@ -42,5 +42,5 @@ export function getAll(reqQuery) {
 }
 
 export function getById(id) {
-    return camisetas.find(s => s.id === id);
+    return camisetas.find(c => c.id === id);
 }
