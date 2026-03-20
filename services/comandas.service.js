@@ -3,47 +3,58 @@ import { getAll as camisetaGetAll } from "./camisetas.service.js";
 
 function validateComanda(obj) {
     if (!obj || typeof obj !== "object") return "Body inválido";
-    if (!obj.cliente || typeof obj.cliente !== "object") {
-        return "Falta el objeto cliente";
-    }
-
-    const { nombre, email } = obj.cliente;
-    if (!nombre || nombre.length < 2) {
-        return "cliente.nombre obligatorio (mín. 2 caracteres)";
-    }
+    if (!obj.cliente || typeof obj.cliente !== "object") return "Falta el objeto cliente";
     
-    // Reference: https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
-    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        return "cliente.email obligatorio (formato inválido)";
-    }
-
+    const clienteValidation = validateCliente(obj.cliente);
+    if (clienteValidation) return clienteValidation;
+    
     if (!Array.isArray(obj.items) || obj.items.length === 0) {
         return "items debe tener al menos 1 elemento";
     }
     
     for (let i = 0; i < obj.items.length; i++) {
         const item = obj.items[i];
+        const itemValidation = validateItem(item, i);
+        if (itemValidation) return itemValidation;
+    }
+    
+    return null;
+}
 
-        if (!item.camisetaId) {
-            return `items[${i}].camisetaId es obligatorio`;
-        }
+function validateCliente(cliente) {
+    const { nombre, email } = cliente;
+    
+    if (!nombre || nombre.length < 2) {
+        return "cliente.nombre obligatorio (mín. 2 caracteres)";
+    }
+    
+    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        return "cliente.email obligatorio (formato inválido)";
+    }
+    
+    return null;
+}
 
-        const camiseta = camisetaGetAll().find(c => c.id === item.camisetaId);
-        if (!camiseta) {
-            return `items[${i}].camisetaId no existe en catálogo`;
-        }
-        
-        if (!Number.isInteger(item.cantidad) || item.cantidad < 1) {
-            return `items[${i}].cantidad debe ser un entero ≥ 1`;
-        }
-        
-        if (!item.talla || !camiseta.tallas.includes(item.talla)) {
-            return `items[${i}].talla no válida`;
-        }
-        
-        if (!item.color || !camiseta.colores.includes(item.color)) {
-            return `items[${i}].color no válido`;
-        }
+function validateItem(item, index) {
+    if (!item.camisetaId) {
+        return `items[${index}].camisetaId es obligatorio`;
+    }
+
+    const camiseta = camisetaGetAll().find(c => c.id === item.camisetaId);
+    if (!camiseta) {
+        return `items[${index}].camisetaId no existe en catálogo`;
+    }
+    
+    if (!Number.isInteger(item.cantidad) || item.cantidad < 1) {
+        return `items[${index}].cantidad debe ser un entero ≥ 1`;
+    }
+    
+    if (!item.talla || !camiseta.tallas.includes(item.talla)) {
+        return `items[${index}].talla no válida`;
+    }
+    
+    if (!item.color || !camiseta.colores.includes(item.color)) {
+        return `items[${index}].color no válido`;
     }
     
     return null;
