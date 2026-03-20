@@ -1,4 +1,4 @@
-import { comandas, nextID } from "../data/comandas.js";
+import { comandas, nextID, loadData, saveData } from "../data/comandas.js";
 import { getAll as camisetaGetAll } from "./camisetas.service.js";
 
 function validateComanda(obj) {
@@ -96,6 +96,8 @@ export function create(newComanda) {
     };
 
     comandas.push(nuevaComanda);
+    saveData(nuevaComanda);
+
     const nuevaComandaReturn = {
         id: nuevaComanda.id,
         fecha: nuevaComanda.fecha,
@@ -106,3 +108,5 @@ export function create(newComanda) {
 
     return { data: nuevaComandaReturn };
 }
+
+loadData();

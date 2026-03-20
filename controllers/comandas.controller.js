@@ -1,3 +1,4 @@
+import { loadData } from '../data/comandas.js';
 import * as comandasService from '../services/comandas.service.js';
 
 export function getAll(req, res) {
@@ -21,3 +22,5 @@ export function create(req, res) {
 
     res.status(201).json({ message: "Created", comandas: result.data });
 }
+
+loadData();
