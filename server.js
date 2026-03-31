@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import camisetasRouter from './routes/camisetas.route.js';
 import comandasRouter from './routes/comandas.route.js';
 
@@ -7,6 +8,7 @@ const PORT = 3001;
 
 // Middlewares globales
 app.use(express.json());
+app.use(cors());
 
 // Log mínimo
 app.use((req, res, next) => {
